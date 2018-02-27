@@ -151,6 +151,7 @@ function writeMarkDown(markdown, Fn){
     console.log(marked(markdown))
     let n = 1
     let timer = setInterval(() => {
+        paper.scrollTop = 10000
         content.innerHTML = markdown.substring(0, n)
         if(n >= markdown.length){
             window.clearInterval(timer)
