@@ -37,13 +37,15 @@ html{
 .token.property{
     color: rgb(153, 0, 85);
 }
+#code{
+    height: 100vh;
+}
 /* oh 非常好，现在我需要一张白纸 */
 `
 
 var text1 = `
 #code{
     width: 50%;
-    height: 100vh;
     position:fixed;
     left: 0;
 }
@@ -72,13 +74,52 @@ var text1 = `
     height: 100vh;
 }
 `
+var markDownText = `
+# hello
+我的名字是Pomelo哈哈，这段话要是能看到就很开心啦。
+# nihao 
+> nihaonihao nihao 
+`
+
 
 writeCode("", text,() => {
     createPaper()
     writeCode(text, text1, () => {
         console.log(2)
+        writeMarkDown(markDownText, () => {
+            markDownToHtml(markDownText, () => {
+                console.log(3)
+            })
+        })
     })
 })
+
+function markDownToHtml(markdown, Fn){
+    let markdownBody = document.createElement('div')
+    let content = document.querySelector('#content')
+    markdownBody.id = 'markdownBody'
+    markdownBody.className  ='markdown-body page'
+    markdownBody.innerHTML = marked(markdown)
+    content.replaceWith(markdownBody)
+    Fn.call(undefined)
+}
+
+function writeMarkDown(markdown, Fn){
+    let paper = document.querySelector('#paper')
+    let content = document.createElement('div')
+    content.id = 'content'
+    paper.appendChild(content)
+    console.log(marked(markdown))
+    let n = 1
+    let timer = setInterval(() => {
+        content.innerHTML = markdown.substring(0, n)
+        if(n >= markdown.length){
+            window.clearInterval(timer)
+            Fn.call(undefined)
+        }
+        n++
+    }, 10)
+}
 
 function writeCode(pretext, text, fn){
     let code = document.querySelector("#code")
@@ -95,13 +136,13 @@ function writeCode(pretext, text, fn){
             fn.call(undefined)
         }
         n++
-    }, 45)
+    }, 10)
 }
 
 
 
 function createPaper(){
-    var paper = document.createElement("pre")
+    let paper = document.createElement("pre")
     paper.id = 'paper'
     document.body.appendChild(paper)
 }

@@ -9,3 +9,7 @@
 .token.punctuation{
     color: black;
 }
+
+.page{
+    padding: 10px;
+}
